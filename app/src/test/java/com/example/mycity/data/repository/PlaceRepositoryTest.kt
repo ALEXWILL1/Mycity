@@ -4,6 +4,7 @@ import com.example.mycity.data.model.Category
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -21,6 +22,33 @@ class PlaceRepositoryTest {
         val categories = repository.getCategories()
 
         assertEquals(7, categories.size)
+    }
+
+    @Test
+    fun getAllPlaces_returnsTwentyOnePlaces() {
+        val places = repository.getAllPlaces()
+
+        assertEquals(21, places.size)
+    }
+
+    @Test
+    fun everyCategory_hasAtLeastThreePlaces() {
+        repository.getCategories().forEach { category ->
+            val places = repository.getPlacesByCategory(category)
+
+            assertTrue(
+                "Category ${category.name} hanya memiliki ${places.size} tempat",
+                places.size >= 3
+            )
+        }
+    }
+
+    @Test
+    fun getAllPlaces_hasUniqueIds() {
+        val places = repository.getAllPlaces()
+        val uniqueIds = places.map { place -> place.id }.toSet()
+
+        assertEquals(places.size, uniqueIds.size)
     }
 
     @Test
